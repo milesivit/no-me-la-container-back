@@ -10,12 +10,19 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Localidad.belongsTo(models.Provincia, {
+        foreignKey: 'provinciaId',
+        as: 'provincias' //alias 
+      });
+      Localidad.hasMany(models.Persona, {
+        foreignKey: 'localidadId', // nombre de la columna en Provincia
+        as: 'personas'      // alias para incluir datos
+      });
     }
   }
   Localidad.init({
     nombre: DataTypes.STRING,
-    provincia_id: DataTypes.INTEGER
+    provincia_Id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Localidad',

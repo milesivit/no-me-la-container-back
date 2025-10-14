@@ -12,8 +12,15 @@ module.exports = {
       nombre: {
         type: Sequelize.STRING
       },
-      provincia_id: {
-        type: Sequelize.INTEGER
+      provinciaId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Provincia', // nombre de la tabla referenciada
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       createdAt: {
         allowNull: false,
