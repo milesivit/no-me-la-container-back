@@ -14,6 +14,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'ciudadId',
         as: 'ciudades' //alias 
       });
+      Puerto.hasMany(models.Viaje, {
+        foreignKey: 'puertoOrigenId', // nombre de la columna en Provincia
+        as: 'ViajeOrigen'      // alias para incluir datos
+      });
+      Puerto.hasMany(models.Viaje, {
+        foreignKey: 'puertoDestinoId', // nombre de la columna en Provincia
+        as: 'ViajeDestino'      // alias para incluir datos
+      });
     }
   }
   Puerto.init({

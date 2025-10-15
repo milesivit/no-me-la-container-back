@@ -10,7 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      factura_estado.hasMany(models.Factura, {
+        foreignKey: 'facturaEstadoId', // nombre de la columna en Provincia
+        as: 'Facturas'      // alias para incluir datos
+      });
     }
   }
   factura_estado.init({

@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'usuarioId',
         as: 'usuario'
       });
+      Empleado.hasMany(models.Viaje_empleado, {
+        foreignKey: 'empleadoId', // nombre de la columna en Provincia
+        as: 'viajesEmpleado'      // alias para incluir datos
+      });
     }
   }
   Empleado.init({

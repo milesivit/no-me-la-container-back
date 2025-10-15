@@ -10,7 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      reserva_estado.hasMany(models.Reserva, {
+        foreignKey: 'reservaEstadoId', // nombre de la columna en Provincia
+        as: 'Reservas'      // alias para incluir datos
+      });
     }
   }
   reserva_estado.init({

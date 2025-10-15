@@ -26,6 +26,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'usuarioId',
         as: 'usuarios' //alias 
       });
+      Cliente.hasMany(models.Reserva, {
+        foreignKey: 'clienteId', // nombre de la columna en Provincia
+        as: 'clienteReservas'      // alias para incluir datos
+      });
+      Cliente.hasMany(models.Remito, {
+        foreignKey: 'clienteId', // nombre de la columna en Provincia
+        as: 'remitos'      // alias para incluir datos
+      });
     }
   }
   Cliente.init({

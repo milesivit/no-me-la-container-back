@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'container_id', // nombre de la columna en Provincia
         as: 'cargaContainers'      // alias para incluir datos
       });
+      Container.hasMany(models.Viaje_container, {
+        foreignKey: 'containerId', // nombre de la columna en Provincia
+        as: 'viajesContainer'      // alias para incluir datos
+      });
     }
   }
   Container.init({

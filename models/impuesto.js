@@ -3,26 +3,26 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class servicios_agregados extends Model {
+  class Impuesto extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      servicios_agregados.hasMany(models.Reserva_servicios, {
-        foreignKey: 'servicioId', // nombre de la columna en Provincia
-        as: 'ServiciosReserva'      // alias para incluir datos
+      Impuesto.hasMany(models.Factura_impuesto, {
+        foreignKey: 'impuestoId', // nombre de la columna en Provincia
+        as: 'facturaImpuesto'      // alias para incluir datos
       });
     }
   }
-  servicios_agregados.init({
+  Impuesto.init({
+    codImpuesto: DataTypes.STRING,
     nombre: DataTypes.STRING,
-    codServicio: DataTypes.STRING,
-    coste: DataTypes.FLOAT
+    importe: DataTypes.FLOAT
   }, {
     sequelize,
-    modelName: 'servicios_agregados',
+    modelName: 'Impuesto',
   });
-  return servicios_agregados;
+  return Impuesto;
 };
