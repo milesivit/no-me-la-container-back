@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Pais', {
+    await queryInterface.createTable('servicios_agregados', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,6 +11,12 @@ module.exports = {
       },
       nombre: {
         type: Sequelize.STRING
+      },
+      codServicio: {
+        type: Sequelize.STRING
+      },
+      coste: {
+        type: Sequelize.FLOAT
       },
       createdAt: {
         allowNull: false,
@@ -23,6 +29,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Pais');
+    await queryInterface.dropTable('servicios_agregados');
   }
 };

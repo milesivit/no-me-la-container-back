@@ -34,16 +34,6 @@ module.exports = {
       correo: {
         type: Sequelize.STRING
       },
-      localidadId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Localidads', // nombre de la tabla referenciada
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
       paisId: {
         type: Sequelize.INTEGER,
         allowNull: false,
