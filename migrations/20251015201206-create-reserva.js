@@ -2,60 +2,45 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Personas', {
+    await queryInterface.createTable('Reservas', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      nombre: {
-        type: Sequelize.STRING
+      clienteId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Clientes', // nombre de la tabla referenciada
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
-      fecha_nacimiento: {
+      cargaContainerId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'carga_containers', // nombre de la tabla referenciada
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
+      fechaReserva: {
         type: Sequelize.DATE
       },
-      direccion: {
-        type: Sequelize.STRING
-      },
-      sexoId: {
+      reservaEstadoId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Sexos', // nombre de la tabla referenciada
+          model: 'reserva_estados', // nombre de la tabla referenciada
           key: 'id'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
-      },
-      dni: {
-        type: Sequelize.STRING
-      },
-      correo: {
-        type: Sequelize.STRING
-      },
-      localidadId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Localidads', // nombre de la tabla referenciada
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      paisId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Pais', // nombre de la tabla referenciada
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      activo: {
-        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -68,6 +53,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Personas');
+    await queryInterface.dropTable('Reservas');
   }
 };

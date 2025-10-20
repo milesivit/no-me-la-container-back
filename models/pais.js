@@ -10,10 +10,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // un pais muchas provincias
-      Pais.hasMany(models.Provincia, {
+      Pais.hasMany(models.Ciudad, {
         foreignKey: 'paisId', // nombre de la columna en Provincia
-        as: 'provincias'      // alias para incluir datos
+        as: 'ciudades'      // alias para incluir datos
       });
       Pais.hasMany(models.Persona, {
         foreignKey: 'paisId', // nombre de la columna en Provincia
@@ -22,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Pais.init({
-    nombre: DataTypes.STRING
+    nombre: DataTypes.STRING,
+    codigo_iso: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Pais',

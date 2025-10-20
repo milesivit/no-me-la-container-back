@@ -10,7 +10,7 @@ const crearBaseDeDatos = async () =>{
         })
     
         //db si no existe
-        await connection.query('CREATE DATABASE IF NOT EXISTS crud_db')
+        await connection.query('CREATE DATABASE IF NOT EXISTS transporte_db')
     
         console.log('la db se creo o ya existe')
     

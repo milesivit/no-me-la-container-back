@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Provincia', {
+    await queryInterface.createTable('categoria_cargas', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,16 +11,6 @@ module.exports = {
       },
       nombre: {
         type: Sequelize.STRING
-      },
-      paisId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Pais', // nombre de la tabla referenciada
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
       },
       createdAt: {
         allowNull: false,
@@ -33,6 +23,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Provincia');
+    await queryInterface.dropTable('categoria_cargas');
   }
 };
