@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Pais.hasMany(models.Ciudad, {
-        foreignKey: 'paisId', // nombre de la columna en Provincia
+        foreignKey: 'pais_Id', // nombre de la columna en Provincia
         as: 'ciudades'      // alias para incluir datos
       });
       Pais.hasMany(models.Persona, {
