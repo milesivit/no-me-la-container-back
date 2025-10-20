@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const { Usuario } = require('../models/usuario');
+const { Usuario } = require('../models');
 const { sendEmail } = require('../utils/mailer');
 
 //mapa temporal para tokens de recuperación
