@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const { 
-    getCargaContainers,
+    getCargasContainer,
     getCargaContainerById,
     createCargaContainer,
     updateCargaContainer,
-    deleteCargaContainer
+    deleteCargaContainer,
 } = require('../controllers/cargaConteiner.controller');
 
-router.get('/', getCargaContainers);
+router.get('/', getCargasContainer);
 router.get('/:id', getCargaContainerById);
 router.post('/', createCargaContainer);
 router.put('/:id', updateCargaContainer);

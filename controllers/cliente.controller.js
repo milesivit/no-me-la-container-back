@@ -15,10 +15,10 @@ const {
         include: [
           { model: RazonSocial, as: 'razonesSociales', attributes: ['id', 'nombre'] },
           { model: CondicionFiscal, as: 'condicionesFiscales', attributes: ['id', 'nombre'] },
-          { model: Persona, as: 'personas', attributes: ['id', 'nombre', 'apellido', 'dni'] },
-          { model: Usuario, as: 'usuarios', attributes: ['id', 'email', 'rol'] },
-          { model: Reserva, as: 'clienteReservas', attributes: ['id', 'fecha'] },
-          { model: Remito, as: 'remitos', attributes: ['id', 'fecha'] },
+          { model: Persona, as: 'personas', attributes: ['id', 'nombre', 'dni'] },
+          { model: Usuario, as: 'usuarios', attributes: ['id', 'correo', 'rol'] },
+          { model: Reserva, as: 'clienteReservas', attributes: ['id', 'fechaReserva'] },
+          { model: Remito, as: 'remitos', attributes: ['id', 'nroRemito'] },
         ],
         order: [['id', 'ASC']],
       });
@@ -40,10 +40,10 @@ const {
         include: [
           { model: RazonSocial, as: 'razonesSociales', attributes: ['id', 'nombre'] },
           { model: CondicionFiscal, as: 'condicionesFiscales', attributes: ['id', 'nombre'] },
-          { model: Persona, as: 'personas', attributes: ['id', 'nombre', 'apellido', 'dni'] },
-          { model: Usuario, as: 'usuarios', attributes: ['id', 'email', 'rol'] },
-          { model: Reserva, as: 'clienteReservas', attributes: ['id', 'fecha'] },
-          { model: Remito, as: 'remitos', attributes: ['id', 'fecha'] },
+          { model: Persona, as: 'personas', attributes: ['id', 'nombre', 'dni'] },
+          { model: Usuario, as: 'usuarios', attributes: ['id', 'correo', 'rol'] },
+          { model: Reserva, as: 'clienteReservas', attributes: ['id', 'fechaReserva'] },
+          { model: Remito, as: 'remitos', attributes: ['id', 'nroRemito'] },
         ],
       });
   

@@ -39,6 +39,7 @@ const viajeEmpleadoRouter= require('./routes/viajeEmpleado.routes')
 const reservaViajeRouter=require('./routes/reservaViaje.routes')
 const reservaServicioRouter=require('./routes/reservaServicios.routes')
 const facturaImpuestoRouter= require('./routes/facturaimpuesto.routes')
+const cargaCointainerRouter = require('./routes/cargaContainer.routes')
 
 app.use('/usuario', usuariosRouter)
 app.use('/auth', authRouter)
@@ -72,6 +73,7 @@ app.use('/viajeempleado', viajeEmpleadoRouter)
 app.use('/reservaviaje', reservaViajeRouter)
 app.use('/reservaservicio', reservaServicioRouter)
 app.use('/facturaimpuesto', facturaImpuestoRouter)
+app.use('/cargacontainer', cargaCointainerRouter)
 
 app.listen(port, () => {
     console.log(`servidor corriendo en localhost:${port}`)

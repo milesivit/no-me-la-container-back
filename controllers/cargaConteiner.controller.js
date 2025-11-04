@@ -1,33 +1,19 @@
-const { carga_container: cargaContainer, Container, categoria_carga: categoriaCarga, Reserva, Remito } = require('../models');
+const { carga_container } = require('../models');
 
-// Obtener todos los cargaContainer con sus relaciones
-const getCargaContainers = async (req, res) => {
+// Todos los cargas
+const getCargasContainer = async (req, res) => {
     try {
-        const cargas = await cargaContainer.findAll({
-            include: [
-                { model: Container, as: 'containers' },
-                { model: categoriaCarga, as: 'categoriasCarga' },
-                { model: Reserva, as: 'Reservas' },
-                { model: Remito, as: 'remitos' }
-            ]
-        });
+        const cargas = await carga_container.findAll();
         res.json({ status: 200, data: cargas });
     } catch (error) {
         res.status(500).json({ status: 500, message: 'Error al obtener cargas', error: error.message });
     }
 };
 
-// Obtener cargaContainer por ID con relaciones
+// Carga por ID
 const getCargaContainerById = async (req, res) => {
     try {
-        const carga = await cargaContainer.findByPk(req.params.id, {
-            include: [
-                { model: Container, as: 'containers' },
-                { model: categoriaCarga, as: 'categoriasCarga' },
-                { model: Reserva, as: 'Reservas' },
-                { model: Remito, as: 'remitos' }
-            ]
-        });
+        const carga = await carga_container.findByPk(req.params.id);
         if (!carga) {
             return res.status(404).json({ status: 404, message: 'Carga no encontrada' });
         }
@@ -37,66 +23,66 @@ const getCargaContainerById = async (req, res) => {
     }
 };
 
-// Crear nuevo cargaContainer
+// Crear nueva carga
 const createCargaContainer = async (req, res) => {
-    const { container_id, descripcion, cantidad, peso, categoriaCarga_id, observaciones } = req.body;
+    const { container_id, descripcion, cantidad, peso, categoria_carga_id, observaciones } = req.body;
     try {
-        if (!container_id || !descripcion || cantidad == null || peso == null || !categoriaCarga_id) {
+        if (!container_id || !descripcion || cantidad == null || peso == null || !categoria_carga_id) {
             return res.status(400).json({ status: 400, message: 'Faltan campos obligatorios' });
         }
 
-        const nuevaCarga = await cargaContainer.create({
+        const nuevaCarga = await carga_container.create({
             container_id,
             descripcion,
             cantidad,
             peso,
-            categoriaCarga_id,
+            categoria_carga_id,
             observaciones: observaciones || null
         });
 
         res.status(201).json({
             status: 201,
             data: nuevaCarga,
-            message: 'Carga creada exitosamente'
+            message: 'Carga creada exitosamente',
         });
     } catch (error) {
         res.status(500).json({ status: 500, message: 'Error al crear carga', error: error.message });
     }
 };
 
-// Actualizar cargaContainer
+// Editar carga
 const updateCargaContainer = async (req, res) => {
     try {
-        const carga = await cargaContainer.findByPk(req.params.id);
+        const carga = await carga_container.findByPk(req.params.id);
         if (!carga) {
             return res.status(404).json({ status: 404, message: 'Carga no encontrada' });
         }
 
-        const { container_id, descripcion, cantidad, peso, categoriaCarga_id, observaciones } = req.body;
+        const { container_id, descripcion, cantidad, peso, categoria_carga_id, observaciones } = req.body;
 
         carga.container_id = container_id ?? carga.container_id;
         carga.descripcion = descripcion ?? carga.descripcion;
         carga.cantidad = cantidad ?? carga.cantidad;
         carga.peso = peso ?? carga.peso;
-        carga.categoriaCarga_id = categoriaCarga_id ?? carga.categoriaCarga_id;
+        carga.categoria_carga_id = categoria_carga_id ?? carga.categoria_carga_id;
         carga.observaciones = observaciones ?? carga.observaciones;
 
         await carga.save();
 
         res.status(200).json({
             status: 200,
-            message: 'Carga actualizada exitosamente',
-            data: carga
+            data: carga,
+            message: 'Carga editada exitosamente',
         });
     } catch (error) {
-        res.status(500).json({ status: 500, message: 'Error al actualizar carga', error: error.message });
+        res.status(500).json({ status: 500, message: 'Error al editar carga', error: error.message });
     }
 };
 
-// Eliminar cargaContainer
+// Eliminar carga
 const deleteCargaContainer = async (req, res) => {
     try {
-        const carga = await cargaContainer.findByPk(req.params.id);
+        const carga = await carga_container.findByPk(req.params.id);
         if (!carga) {
             return res.status(404).json({ status: 404, message: 'Carga no encontrada' });
         }
@@ -110,9 +96,9 @@ const deleteCargaContainer = async (req, res) => {
 };
 
 module.exports = {
-    getCargaContainers,
+    getCargasContainer,
     getCargaContainerById,
     createCargaContainer,
     updateCargaContainer,
-    deleteCargaContainer
+    deleteCargaContainer,
 };
