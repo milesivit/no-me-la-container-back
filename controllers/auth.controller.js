@@ -96,7 +96,7 @@ const forgotPassword = async (req, res) => {
 
         resetTokens.set(user.id, { tokenHash, expiresAt });
 
-        const resetUrl = `${process.env.FRONT_URL || 'http://localhost:5173'}/recuperar-contraseña?token=${rawToken}&id=${user.id}`;
+        const resetUrl = `${process.env.FRONT_URL || 'http://localhost:5173'}/recuperar-contrasenia?token=${rawToken}&id=${user.id}`;
 
         await sendEmail({
             to: user.correo,
