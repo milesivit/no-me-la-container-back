@@ -14,9 +14,13 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'pais_Id', // nombre de la columna en Provincia
         as: 'ciudades'      // alias para incluir datos
       });
-      Pais.hasMany(models.Persona, {
+      Pais.hasMany(models.Empleado, {
         foreignKey: 'paisId', // nombre de la columna en Provincia
-        as: 'personas'      // alias para incluir datos
+        as: 'empleados'      // alias para incluir datos
+      });
+      Pais.hasMany(models.Cliente, {
+        foreignKey: 'paisId', // nombre de la columna en Provincia
+        as: 'clientes'      // alias para incluir datos
       });
     }
   }

@@ -10,9 +10,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Sexo.hasMany(models.Persona, {
+      Sexo.hasMany(models.Cliente, {
         foreignKey: 'sexoId', // nombre de la columna en Provincia
-        as: 'personas'      // alias para incluir datos
+        as: 'clientes'      // alias para incluir datos
+      });
+      Sexo.hasMany(models.Empleado, {
+        foreignKey: 'sexoId', // nombre de la columna en Provincia
+        as: 'empleados'      // alias para incluir datos
       });
     }
   }

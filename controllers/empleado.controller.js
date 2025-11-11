@@ -1,18 +1,33 @@
-const { Empleado, Persona, Cargo, Usuario } = require('../models');
+const {
+  Empleado,
+  Cargo,
+  Usuario,
+  Sexo,
+  Pais,
+  Viaje_empleado,
+} = require('../models');
 
 // Obtener todos los empleados
 const getEmpleados = async (req, res) => {
   try {
     const empleados = await Empleado.findAll({
       include: [
-        { model: Persona, as: 'persona' },
-        { model: Cargo, as: 'cargo' },
-        { model: Usuario, as: 'usuario' },
+        { model: Cargo, as: 'cargo', attributes: ['id', 'nombre'] },
+        { model: Usuario, as: 'usuario', attributes: ['id', 'correo', 'rol'] },
+        { model: Sexo, as: 'sexo', attributes: ['id', 'nombre'] },
+        { model: Pais, as: 'pais', attributes: ['id', 'nombre'] },
+        { model: Viaje_empleado, as: 'viajesEmpleado', attributes: ['id', 'viajeId'] },
       ],
+      order: [['id', 'ASC']],
     });
+
     res.json({ status: 200, data: empleados });
   } catch (error) {
-    res.status(500).json({ status: 500, message: 'Error al obtener empleados', error: error.message });
+    res.status(500).json({
+      status: 500,
+      message: 'Error al obtener empleados',
+      error: error.message,
+    });
   }
 };
 
@@ -21,9 +36,11 @@ const getEmpleadoById = async (req, res) => {
   try {
     const empleado = await Empleado.findByPk(req.params.id, {
       include: [
-        { model: Persona, as: 'persona' },
-        { model: Cargo, as: 'cargo' },
-        { model: Usuario, as: 'usuario' },
+        { model: Cargo, as: 'cargo', attributes: ['id', 'nombre'] },
+        { model: Usuario, as: 'usuario', attributes: ['id', 'correo', 'rol'] },
+        { model: Sexo, as: 'sexo', attributes: ['id', 'nombre'] },
+        { model: Pais, as: 'pais', attributes: ['id', 'nombre'] },
+        { model: Viaje_empleado, as: 'viajesEmpleado', attributes: ['id', 'viajeId'] },
       ],
     });
 
@@ -33,37 +50,61 @@ const getEmpleadoById = async (req, res) => {
 
     res.json({ status: 200, data: empleado });
   } catch (error) {
-    res.status(500).json({ status: 500, message: 'Error al obtener empleado', error: error.message });
+    res.status(500).json({
+      status: 500,
+      message: 'Error al obtener empleado',
+      error: error.message,
+    });
   }
 };
 
 // Crear un nuevo empleado
 const createEmpleado = async (req, res) => {
-  const { personaId, cargoId, usuarioId, numeroLegajo, licencia, cbu, cuil, activo } = req.body;
+  const {
+    cargoId,
+    usuarioId,
+    numeroLegajo,
+    licencia,
+    cbu,
+    cuil,
+    dni,
+    sexoId,
+    paisId,
+    direccion,
+    fecha_nacimiento,
+    activo,
+  } = req.body;
 
   try {
     // Validar campos obligatorios
-    if (!personaId || !cargoId || !numeroLegajo || !cuil) {
-      return res.status(400).json({ status: 400, message: 'Faltan campos obligatorios' });
+    if (!cargoId || !numeroLegajo || !cuil || !usuarioId) {
+      return res.status(400).json({
+        status: 400,
+        message: 'Los campos cargoId, numeroLegajo, cuil y usuarioId son obligatorios',
+      });
     }
 
     // Verificar si ya existe un empleado con ese número de legajo o CUIL
-    const existeEmpleado = await Empleado.findOne({
-      where: { cuil },
-    });
-
+    const existeEmpleado = await Empleado.findOne({ where: { cuil } });
     if (existeEmpleado) {
-      return res.status(400).json({ status: 400, message: 'Ya existe un empleado con ese CUIL' });
+      return res.status(400).json({
+        status: 400,
+        message: 'Ya existe un empleado con ese CUIL',
+      });
     }
 
     const nuevoEmpleado = await Empleado.create({
-      personaId,
       cargoId,
       usuarioId,
       numeroLegajo,
       licencia: licencia ?? false,
       cbu: cbu ?? null,
       cuil,
+      dni,
+      sexoId,
+      paisId,
+      direccion,
+      fecha_nacimiento,
       activo: activo ?? true,
     });
 
@@ -73,7 +114,11 @@ const createEmpleado = async (req, res) => {
       data: nuevoEmpleado,
     });
   } catch (error) {
-    res.status(500).json({ status: 500, message: 'Error al crear empleado', error: error.message });
+    res.status(500).json({
+      status: 500,
+      message: 'Error al crear empleado',
+      error: error.message,
+    });
   }
 };
 
@@ -81,23 +126,39 @@ const createEmpleado = async (req, res) => {
 const updateEmpleado = async (req, res) => {
   try {
     const empleado = await Empleado.findByPk(req.params.id);
-
     if (!empleado) {
       return res.status(404).json({ status: 404, message: 'Empleado no encontrado' });
     }
 
-    const { personaId, cargoId, usuarioId, numeroLegajo, licencia, cbu, cuil, activo } = req.body;
+    const {
+      cargoId,
+      usuarioId,
+      numeroLegajo,
+      licencia,
+      cbu,
+      cuil,
+      dni,
+      sexoId,
+      paisId,
+      direccion,
+      fecha_nacimiento,
+      activo,
+    } = req.body;
 
-    empleado.personaId = personaId ?? empleado.personaId;
-    empleado.cargoId = cargoId ?? empleado.cargoId;
-    empleado.usuarioId = usuarioId ?? empleado.usuarioId;
-    empleado.numeroLegajo = numeroLegajo ?? empleado.numeroLegajo;
-    empleado.licencia = licencia ?? empleado.licencia;
-    empleado.cbu = cbu ?? empleado.cbu;
-    empleado.cuil = cuil ?? empleado.cuil;
-    empleado.activo = activo ?? empleado.activo;
-
-    await empleado.save();
+    await empleado.update({
+      cargoId: cargoId ?? empleado.cargoId,
+      usuarioId: usuarioId ?? empleado.usuarioId,
+      numeroLegajo: numeroLegajo ?? empleado.numeroLegajo,
+      licencia: licencia ?? empleado.licencia,
+      cbu: cbu ?? empleado.cbu,
+      cuil: cuil ?? empleado.cuil,
+      dni: dni ?? empleado.dni,
+      sexoId: sexoId ?? empleado.sexoId,
+      paisId: paisId ?? empleado.paisId,
+      direccion: direccion ?? empleado.direccion,
+      fecha_nacimiento: fecha_nacimiento ?? empleado.fecha_nacimiento,
+      activo: activo ?? empleado.activo,
+    });
 
     res.status(200).json({
       status: 200,
@@ -105,7 +166,11 @@ const updateEmpleado = async (req, res) => {
       data: empleado,
     });
   } catch (error) {
-    res.status(500).json({ status: 500, message: 'Error al actualizar empleado', error: error.message });
+    res.status(500).json({
+      status: 500,
+      message: 'Error al actualizar empleado',
+      error: error.message,
+    });
   }
 };
 
@@ -113,16 +178,22 @@ const updateEmpleado = async (req, res) => {
 const deleteEmpleado = async (req, res) => {
   try {
     const empleado = await Empleado.findByPk(req.params.id);
-
     if (!empleado) {
       return res.status(404).json({ status: 404, message: 'Empleado no encontrado' });
     }
 
     await empleado.destroy();
 
-    res.status(200).json({ status: 200, message: 'Empleado eliminado exitosamente' });
+    res.status(200).json({
+      status: 200,
+      message: 'Empleado eliminado exitosamente',
+    });
   } catch (error) {
-    res.status(500).json({ status: 500, message: 'Error al eliminar empleado', error: error.message });
+    res.status(500).json({
+      status: 500,
+      message: 'Error al eliminar empleado',
+      error: error.message,
+    });
   }
 };
 

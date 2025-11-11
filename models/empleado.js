@@ -1,19 +1,10 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Empleado extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      Empleado.belongsTo(models.Persona, {
-        foreignKey: 'personaId',
-        as: 'persona'
-      });
+      // Relaciones con otras tablas
       Empleado.belongsTo(models.Cargo, {
         foreignKey: 'cargoId',
         as: 'cargo'
@@ -22,24 +13,38 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'usuarioId',
         as: 'usuario'
       });
+      Empleado.belongsTo(models.Sexo, {
+        foreignKey: 'sexoId',
+        as: 'sexo'
+      });
+      Empleado.belongsTo(models.Pais, {
+        foreignKey: 'paisId',
+        as: 'pais'
+      });
       Empleado.hasMany(models.Viaje_empleado, {
-        foreignKey: 'empleadoId', // nombre de la columna en Provincia
-        as: 'viajesEmpleado'      // alias para incluir datos
+        foreignKey: 'empleadoId',
+        as: 'viajesEmpleado'
       });
     }
   }
+
   Empleado.init({
-    personaId: DataTypes.INTEGER,
     cargoId: DataTypes.INTEGER,
     usuarioId: DataTypes.INTEGER,
     numeroLegajo: DataTypes.STRING,
     licencia: DataTypes.BOOLEAN,
     cbu: DataTypes.STRING,
     cuil: DataTypes.STRING,
+    dni: DataTypes.STRING,
+    sexoId: DataTypes.INTEGER,
+    paisId: DataTypes.INTEGER,
+    direccion: DataTypes.STRING,
+    fecha_nacimiento: DataTypes.DATE,
     activo: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Empleado',
   });
+
   return Empleado;
 };
