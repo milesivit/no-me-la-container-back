@@ -1,6 +1,8 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const swaggerUi = require('swagger-ui-express');
+const specs = require('./swagger/swagger');
 const app = express()
 
 const port = 3000
@@ -72,6 +74,7 @@ app.use('/reservaviaje', reservaViajeRouter)
 app.use('/reservaservicio', reservaServicioRouter)
 app.use('/facturaimpuesto', facturaImpuestoRouter)
 app.use('/cargacontainer', cargaCointainerRouter)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 
 app.listen(port, () => {
     console.log(`servidor corriendo en localhost:${port}`)
