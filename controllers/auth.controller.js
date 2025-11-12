@@ -42,10 +42,8 @@ const register = async (req, res) => {
             activo: activo !== undefined ? activo : true
         });
 
-        res.status(201).json({
-            message: 'Usuario registrado exitosamente',
-            data: newUser
-        });
+        res.status(201).json(newUser);
+
     } catch (error) {
         res.status(500).json({ message: 'Error al registrar usuario', error: error.message });
     }
