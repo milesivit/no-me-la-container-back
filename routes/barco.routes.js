@@ -8,6 +8,8 @@ const {
     deleteBarco,
 } = require('../controllers/barco.controller');
 
+const verifyToken = require('../middlewares/verifyToken');
+const isAdmin = require('../middlewares/isAdmin')
 /**
  * @swagger
  * components:
@@ -78,7 +80,7 @@ const {
  *             example:
  *               message: "Error al obtener barco."
  */
-router.get('/', getBarcos);
+router.get('/', verifyToken, getBarcos);
 
 /**
  * @swagger
@@ -123,7 +125,7 @@ router.get('/', getBarcos);
  *             example:
  *               message: "Error al obtener barco."
  */
-router.get('/:id', getBarcoById);
+router.get('/:id', verifyToken, getBarcoById);
 
 /**
  * @openapi
@@ -235,7 +237,7 @@ router.get('/:id', getBarcoById);
  *             example:
  *               message: "Error al crear barco."
  */
-router.post('/', createBarco);
+router.post('/', verifyToken, isAdmin, createBarco);
 
 /**
  * @swagger
@@ -286,7 +288,7 @@ router.post('/', createBarco);
  *             example:
  *               message: "Error al actualizar barco."
  */
-router.put('/:id', updateBarco);
+router.put('/:id', verifyToken, isAdmin, updateBarco);
 
 /**
  * @swagger
@@ -336,6 +338,6 @@ router.put('/:id', updateBarco);
  *             example:
  *               message: "Error al eliminar barco."
  */
-router.delete('/:id', deleteBarco);
+router.delete('/:id', verifyToken, isAdmin, deleteBarco);
 
 module.exports = router;
