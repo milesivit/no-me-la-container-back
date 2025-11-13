@@ -18,9 +18,9 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'viajeId',
         as: 'viajes' //alias 
       });
-      Remito.belongsTo(models.carga_container, {
-        foreignKey: 'containerCargaId',
-        as: 'containersCarga' //alias 
+      Remito.belongsTo(models.Viaje_container, {
+        foreignKey: 'viajeContainerId',
+        as: 'viajeContainer'
       });
     }
   }
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     nroRemito: DataTypes.STRING,
     clienteId: DataTypes.INTEGER,
     viajeId: DataTypes.INTEGER,
-    containerCargaId: DataTypes.INTEGER,
+    viajeContainerId: DataTypes.INTEGER,
     descripcion: DataTypes.TEXT,
     firmaReceptor: DataTypes.STRING,
     create_at: DataTypes.DATE

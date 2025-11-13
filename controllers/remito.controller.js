@@ -1,4 +1,4 @@
-const { Remito, Cliente, Viaje, carga_container: cargaContainer } = require('../models');
+const { Remito, Cliente, Viaje, Viaje_container: ViajeContainer } = require('../models');
 
 // Obtener todos los remitos con sus relaciones
 const getRemitos = async (req, res) => {
@@ -7,7 +7,7 @@ const getRemitos = async (req, res) => {
             include: [
                 { model: Cliente, as: 'clientes' },
                 { model: Viaje, as: 'viajes' },
-                { model: cargaContainer, as: 'containersCarga' }
+                { model: ViajeContainer, as: 'viajeContainer' }
             ]
         });
         res.json({ status: 200, data: remitos });
@@ -23,7 +23,7 @@ const getRemitoById = async (req, res) => {
             include: [
                 { model: Cliente, as: 'clientes' },
                 { model: Viaje, as: 'viajes' },
-                { model: cargaContainer, as: 'containersCarga' }
+                { model: ViajeContainer, as: 'viajeContainer' }
             ]
         });
         if (!remito) {
@@ -37,17 +37,17 @@ const getRemitoById = async (req, res) => {
 
 // Crear nuevo remito
 const createRemito = async (req, res) => {
-    const { nroRemito, clienteId, viajeId, containerCargaId, descripcion, firmaReceptor, create_at } = req.body;
+    const { nroRemito, clienteId, viajeId, viajeContainerId, descripcion, firmaReceptor, create_at } = req.body;
     try {
-        if (!nroRemito || !clienteId || !viajeId || !containerCargaId) {
+        if (!nroRemito || !clienteId || !viajeContainerId) {
             return res.status(400).json({ status: 400, message: 'Faltan campos obligatorios' });
         }
 
         const nuevoRemito = await Remito.create({
             nroRemito,
             clienteId,
-            viajeId,
-            containerCargaId,
+            viajeId: viajeId || null,
+            viajeContainerId,
             descripcion: descripcion || null,
             firmaReceptor: firmaReceptor || null,
             create_at: create_at || new Date()
@@ -71,12 +71,12 @@ const updateRemito = async (req, res) => {
             return res.status(404).json({ status: 404, message: 'Remito no encontrado' });
         }
 
-        const { nroRemito, clienteId, viajeId, containerCargaId, descripcion, firmaReceptor, create_at } = req.body;
+        const { nroRemito, clienteId, viajeId, viajeContainerId, descripcion, firmaReceptor, create_at } = req.body;
 
         remito.nroRemito = nroRemito ?? remito.nroRemito;
         remito.clienteId = clienteId ?? remito.clienteId;
         remito.viajeId = viajeId ?? remito.viajeId;
-        remito.containerCargaId = containerCargaId ?? remito.containerCargaId;
+        remito.viajeContainerId = viajeContainerId ?? remito.viajeContainerId;
         remito.descripcion = descripcion ?? remito.descripcion;
         remito.firmaReceptor = firmaReceptor ?? remito.firmaReceptor;
         remito.create_at = create_at ?? remito.create_at;
