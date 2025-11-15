@@ -6,7 +6,7 @@ const {
     createViajeContainer,
     updateViajeContainer,
     deleteViajeContainer
-} = require('../controllers/viajecontainer.controller');
+} = require('../controllers/viajeContainer.controller');
 
 /**
  * @swagger

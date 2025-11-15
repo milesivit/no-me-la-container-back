@@ -6,7 +6,7 @@ const {
     createReservaServicio,
     updateReservaServicio,
     deleteReservaServicio
-} = require('../controllers/reservaservicios.controller');
+} = require('../controllers/reservaServicios.controller');
 
 /**
  * @swagger
