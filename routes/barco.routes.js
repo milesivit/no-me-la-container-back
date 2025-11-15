@@ -10,12 +10,15 @@ const {
 
 const verifyToken = require('../middlewares/verifyToken');
 const isAdmin = require('../middlewares/isAdmin')
+
 /**
  * @swagger
  * components:
  *   schemas:
  *     Barco:
  *       type: object
+ *       security:
+ *         - bearerAuth: []
  *       properties:
  *         id:
  *           type: integer
@@ -57,10 +60,22 @@ const isAdmin = require('../middlewares/isAdmin')
 
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+
+/**
+ * @swagger
  * /barco:
  *   get:
  *     summary: Obtener todos los barcos
  *     tags: [Barco]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Barcos encontrados
@@ -88,6 +103,8 @@ router.get('/', verifyToken, getBarcos);
  *   get:
  *     summary: Obtener barco por id
  *     tags: [Barco]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -134,6 +151,8 @@ router.get('/:id', verifyToken, getBarcoById);
  *     summary: Creacion de Barco
  *     description: Endpoint para crear un nuevo barco.
  *     tags: [Barco]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -245,6 +264,8 @@ router.post('/', verifyToken, isAdmin, createBarco);
  *   put:
  *     summary: Edicion de barco por id
  *     tags: [Barco]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -296,6 +317,8 @@ router.put('/:id', verifyToken, isAdmin, updateBarco);
  *   delete:
  *     summary: Eliminar un barco por id
  *     tags: [Barco]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

@@ -30,7 +30,7 @@ const {
  * @swagger
  * tags:
  *   name: Cargo
- *   description: Documentacion acerca de los distitos cargos de los empleados
+ *   description: Documentacion acerca de los distintos cargos de los empleados
  */
 
 /**

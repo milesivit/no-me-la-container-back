@@ -30,7 +30,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Viaje_container.init({
     viajeId: DataTypes.INTEGER,
-    containerId: DataTypes.INTEGER
+    containerId: DataTypes.INTEGER,
+    cargaContainerId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Viaje_container',
