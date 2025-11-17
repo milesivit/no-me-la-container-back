@@ -1,37 +1,76 @@
-const { Viaje_empleado: ViajeEmpleado, Viaje, Empleado } = require('../models');
+const { 
+    Viaje_empleado: ViajeEmpleado, 
+    Viaje, 
+    Empleado,
+    Puerto,
+    viaje_estado: ViajeEstado,
+    Barco 
+} = require('../models');
+
 
 // Obtener todas las asignaciones viaje-empleado con relaciones
 const getViajeEmpleados = async (req, res) => {
     try {
         const asignaciones = await ViajeEmpleado.findAll({
             include: [
-                { model: Viaje, as: 'viajes' },
-                { model: Empleado, as: 'empleados' }
+                { 
+                    model: Viaje,
+                    as: 'viajes',
+                    include: [
+                        { model: Puerto, as: 'puertoOrigen', attributes: ['id', 'nombre'] },
+                        { model: Puerto, as: 'puertoDestino', attributes: ['id', 'nombre'] },
+                        { model: Barco,  as: 'barcos',       attributes: ['id', 'nombre'] },
+                        { model: ViajeEstado, as: 'viajeEstado', attributes: ['id', 'nombre'] }
+                    ]
+                },
+                { 
+                    model: Empleado,
+                    as: 'empleados'
+                }
             ]
         });
+
         res.json({ status: 200, data: asignaciones });
+
     } catch (error) {
         res.status(500).json({ status: 500, message: 'Error al obtener asignaciones', error: error.message });
     }
 };
+
 
 // Obtener asignación por ID
 const getViajeEmpleadoById = async (req, res) => {
     try {
         const asignacion = await ViajeEmpleado.findByPk(req.params.id, {
             include: [
-                { model: Viaje, as: 'viajes' },
-                { model: Empleado, as: 'empleados' }
+                { 
+                    model: Viaje,
+                    as: 'viajes',
+                    include: [
+                        { model: Puerto, as: 'puertoOrigen', attributes: ['id', 'nombre'] },
+                        { model: Puerto, as: 'puertoDestino', attributes: ['id', 'nombre'] },
+                        { model: Barco,  as: 'barcos',       attributes: ['id', 'nombre'] },
+                        { model: ViajeEstado, as: 'viajeEstado', attributes: ['id', 'nombre'] }
+                    ]
+                },
+                { 
+                    model: Empleado,
+                    as: 'empleados'
+                }
             ]
         });
+
         if (!asignacion) {
             return res.status(404).json({ status: 404, message: 'Asignación no encontrada' });
         }
+
         res.json({ status: 200, data: asignacion });
+
     } catch (error) {
         res.status(500).json({ status: 500, message: 'Error al obtener asignación', error: error.message });
     }
 };
+
 
 // Crear nueva asignación viaje-empleado
 const createViajeEmpleado = async (req, res) => {
