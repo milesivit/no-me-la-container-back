@@ -139,10 +139,38 @@ const deleteViajeEmpleado = async (req, res) => {
     }
 };
 
+// Obtener todos los viajes de un empleado (moderador)
+const getViajesByEmpleado = async (req, res) => {
+    try {
+      const { empleadoId } = req.params; // ID del empleado logueado
+  
+      const asignaciones = await ViajeEmpleado.findAll({
+        where: { empleadoId },
+        include: [
+          { 
+            model: Viaje,
+            as: 'viajes',
+            include: [
+              { model: Puerto, as: 'puertoOrigen', attributes: ['id', 'nombre'] },
+              { model: Puerto, as: 'puertoDestino', attributes: ['id', 'nombre'] },
+              { model: Barco, as: 'barcos', attributes: ['id', 'nombre'] },
+              { model: ViajeEstado, as: 'viajeEstado', attributes: ['id', 'nombre'] }
+            ]
+          }
+        ]
+      });
+  
+      res.json({ status: 200, data: asignaciones });
+    } catch (error) {
+      res.status(500).json({ status: 500, message: 'Error al obtener viajes del empleado', error: error.message });
+    }
+  };
+  
 module.exports = {
     getViajeEmpleados,
     getViajeEmpleadoById,
     createViajeEmpleado,
     updateViajeEmpleado,
-    deleteViajeEmpleado
+    deleteViajeEmpleado,
+    getViajesByEmpleado
 };

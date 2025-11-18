@@ -5,7 +5,8 @@ const {
   getViajeEmpleadoById,
   createViajeEmpleado,
   updateViajeEmpleado,
-  deleteViajeEmpleado
+  deleteViajeEmpleado,
+  getViajesByEmpleado
 } = require('../controllers/viajeEmpleado.controller');
 
 
@@ -297,6 +298,7 @@ router.put('/:id', updateViajeEmpleado);
  *               message: "Error al eliminar viajeEmpleado."
  */
 router.delete('/:id', deleteViajeEmpleado);
+router.get('/empleado/:empleadoId', getViajesByEmpleado);
 
 
 module.exports = router;

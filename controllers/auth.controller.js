@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const { Usuario } = require('../models');
+const { Usuario, Empleado } = require('../models');
 const { sendEmail } = require('../utils/mailer');
 
 //mapa temporal para tokens de recuperación
@@ -62,24 +62,35 @@ const login = async (req, res) => {
         const validPassword = await bcrypt.compare(contrasena, userExist.contrasena);
         if (!validPassword) return res.status(403).json({ message: 'Contraseña incorrecta' });
 
+        const empleado = await Empleado.findOne({
+            where: { usuarioId: userExist.id }
+        });
+
         const user = {
             id: userExist.id,
             nombre: userExist.nombre,
             correo: userExist.correo,
-            rol: userExist.rol
+            rol: userExist.rol,
+            empleadoId: empleado ? empleado.id : null  
         };
-        
-        const token = jwt.sign({ user: user }, 'secreto1234', { expiresIn: '1h' })
+
+        const token = jwt.sign(
+            { user },
+            'secreto1234',
+            { expiresIn: '24h' }
+        );
 
         res.json({
             message: 'Inicio de sesión exitoso',
             token,
             user
         });
+
     } catch (error) {
         res.status(500).json({ message: 'Error al iniciar sesión', error: error.message });
     }
 };
+
 
 const forgotPassword = async (req, res) => {
     const { correo } = req.body;
