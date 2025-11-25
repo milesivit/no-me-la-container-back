@@ -18,10 +18,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'categoria_carga_id',
         as: 'categoriasCarga'
       });
-      carga_container.hasMany(models.Reserva, {
-        foreignKey: 'cargaContainerId', // nombre de la columna
-        as: 'Reservas'      // alias para incluir datos
-      });
       carga_container.hasMany(models.Viaje_container, {
         foreignKey: 'cargaContainerId', // nombre de la columna
         as: 'ViajeContainer'      // alias para incluir datos

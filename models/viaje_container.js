@@ -26,6 +26,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'viajeContainerId', // nombre de la columna
         as: 'Remitos'      // alias para incluir datos
       });
+      Viaje_container.hasMany(models.Reserva, {
+        foreignKey: 'viajeContainerId',
+        as: 'Reservas'
+      });
+      
     }
   }
   Viaje_container.init({

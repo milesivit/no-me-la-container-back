@@ -14,9 +14,9 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'clienteId',
         as: 'clientes' //alias 
       });
-      Reserva.belongsTo(models.carga_container, {
-        foreignKey: 'cargaContainerId',
-        as: 'cargasContainer' //alias 
+      Reserva.belongsTo(models.Viaje_container, {
+        foreignKey: 'viajeContainerId',
+        as: 'viajesContainer'
       });
       Reserva.belongsTo(models.reserva_estado, {
         foreignKey: 'reservaEstadoId',
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Reserva.init({
     clienteId: DataTypes.INTEGER,
-    cargaContainerId: DataTypes.INTEGER,
+    viajeContainerId: DataTypes.INTEGER,
     fechaReserva: DataTypes.DATE,
     reservaEstadoId: DataTypes.INTEGER
   }, {

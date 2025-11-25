@@ -1,4 +1,4 @@
-const { Reserva, Cliente, carga_container, reserva_estado, Reserva_servicios, Reserva_viaje, Factura } = require('../models');
+const { Reserva, Cliente, Viaje_container, reserva_estado, Reserva_servicios, Reserva_viaje, Factura } = require('../models');
 
 // Obtener todas las reservas
 const getReservas = async (req, res) => {
@@ -6,7 +6,7 @@ const getReservas = async (req, res) => {
         const reservas = await Reserva.findAll({
             include: [
                 { model: Cliente, as: 'clientes' },
-                { model: carga_container, as: 'cargasContainer' },
+                { model: Viaje_container, as: 'viajesContainer' },
                 { model: reserva_estado, as: 'reservasEstado' },
                 { model: Reserva_servicios, as: 'ServiciosReserva' },
                 { model: Reserva_viaje, as: 'ViajesReserva' },
@@ -30,7 +30,7 @@ const getReservaById = async (req, res) => {
         const reserva = await Reserva.findByPk(req.params.id, {
             include: [
                 { model: Cliente, as: 'clientes' },
-                { model: carga_container, as: 'cargasContainer' },
+                { model: Viaje_container, as: 'viajesContainer' },
                 { model: reserva_estado, as: 'reservasEstado' },
                 { model: Reserva_servicios, as: 'ServiciosReserva' },
                 { model: Reserva_viaje, as: 'ViajesReserva' },
@@ -54,19 +54,19 @@ const getReservaById = async (req, res) => {
 
 // Crear una nueva reserva
 const createReserva = async (req, res) => {
-    const { clienteId, cargaContainerId, fechaReserva, reservaEstadoId } = req.body;
+    const { clienteId, viajeContainerId, fechaReserva, reservaEstadoId } = req.body;
 
     try {
-        if (!clienteId || !cargaContainerId || !fechaReserva || !reservaEstadoId) {
+        if (!clienteId || !viajeContainerId || !fechaReserva || !reservaEstadoId) {
             return res.status(400).json({
                 status: 400,
-                message: 'Faltan campos obligatorios (clienteId, cargaContainerId, fechaReserva, reservaEstadoId)',
+                message: 'Faltan campos obligatorios (clienteId, viajeContainerId, fechaReserva, reservaEstadoId)',
             });
         }
 
         const nuevaReserva = await Reserva.create({
             clienteId,
-            cargaContainerId,
+            viajeContainerId,
             fechaReserva,
             reservaEstadoId,
         });
@@ -97,10 +97,10 @@ const updateReserva = async (req, res) => {
             });
         }
 
-        const { clienteId, cargaContainerId, fechaReserva, reservaEstadoId } = req.body;
+        const { clienteId, viajeContainerId, fechaReserva, reservaEstadoId } = req.body;
 
         reserva.clienteId = clienteId ?? reserva.clienteId;
-        reserva.cargaContainerId = cargaContainerId ?? reserva.cargaContainerId;
+        reserva.viajeContainerId = viajeContainerId ?? reserva.viajeContainerId;
         reserva.fechaReserva = fechaReserva ?? reserva.fechaReserva;
         reserva.reservaEstadoId = reservaEstadoId ?? reserva.reservaEstadoId;
 
