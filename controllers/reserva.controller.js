@@ -147,10 +147,26 @@ const deleteReserva = async (req, res) => {
     }
 };
 
+// ReservaController
+const getFacturaByReserva = async (req, res) => {
+    const { Reserva, Factura } = require('../models');
+  
+    const factura = await Factura.findOne({
+      where: { reservaId: req.params.id },
+    });
+  
+    if (!factura)
+      return res.status(404).json({ message: 'No existe factura para la reserva' });
+  
+    res.json({ data: factura });
+  };
+  
+
 module.exports = {
     getReservas,
     getReservaById,
     createReserva,
     updateReserva,
     deleteReserva,
+    getFacturaByReserva
 };

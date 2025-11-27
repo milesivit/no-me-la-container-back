@@ -6,6 +6,7 @@ const {
     createReserva,
     updateReserva,
     deleteReserva,
+    getFacturaByReserva
 } = require('../controllers/reserva.controller');
 
 /**
@@ -312,5 +313,6 @@ router.put('/:id', updateReserva);
  *               message: "Error al eliminar reserva."
  */
 router.delete('/:id', deleteReserva);
+router.get('/:id/factura', getFacturaByReserva);
 
 module.exports = router;
