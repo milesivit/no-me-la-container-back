@@ -1,25 +1,53 @@
-const { Reserva, Cliente, Viaje_container, reserva_estado, Reserva_servicios, Reserva_viaje, Factura } = require('../models');
+const {
+    Reserva,
+    Cliente,
+    Viaje_container,
+    Viaje,
+    Puerto,
+    Barco,
+    Container,
+    carga_container,
+    reserva_estado,
+    Reserva_servicios,
+    Reserva_viaje,
+    Factura
+} = require("../models");
+
+// INCLUDE BASE
+const reservaInclude = [
+    { model: Cliente, as: "clientes" },
+    { 
+        model: Viaje_container, 
+        as: "viajesContainer",
+        include: [
+            {
+                model: Viaje,
+                as: "viajes",
+                include: [
+                    { model: Puerto, as: "puertoOrigen" },
+                    { model: Puerto, as: "puertoDestino" },
+                    { model: Barco, as: "barcos" }
+                ]
+            },
+            { model: Container, as: "containers" },
+            { model: carga_container, as: "cargasContainer" }
+        ]
+    },
+    { model: reserva_estado, as: "reservasEstado" },
+    { model: Reserva_servicios, as: "ServiciosReserva" },
+    { model: Factura, as: "Facturas" }
+];
 
 // Obtener todas las reservas
 const getReservas = async (req, res) => {
     try {
-        const reservas = await Reserva.findAll({
-            include: [
-                { model: Cliente, as: 'clientes' },
-                { model: Viaje_container, as: 'viajesContainer' },
-                { model: reserva_estado, as: 'reservasEstado' },
-                { model: Reserva_servicios, as: 'ServiciosReserva' },
-                { model: Reserva_viaje, as: 'ViajesReserva' },
-                { model: Factura, as: 'Facturas' },
-            ],
-        });
-
+        const reservas = await Reserva.findAll({ include: reservaInclude });
         res.json({ status: 200, data: reservas });
     } catch (error) {
         res.status(500).json({
             status: 500,
-            message: 'Error al obtener las reservas',
-            error: error.message,
+            message: "Error al obtener las reservas",
+            error: error.message
         });
     }
 };
@@ -28,31 +56,24 @@ const getReservas = async (req, res) => {
 const getReservaById = async (req, res) => {
     try {
         const reserva = await Reserva.findByPk(req.params.id, {
-            include: [
-                { model: Cliente, as: 'clientes' },
-                { model: Viaje_container, as: 'viajesContainer' },
-                { model: reserva_estado, as: 'reservasEstado' },
-                { model: Reserva_servicios, as: 'ServiciosReserva' },
-                { model: Reserva_viaje, as: 'ViajesReserva' },
-                { model: Factura, as: 'Facturas' },
-            ],
+            include: reservaInclude
         });
 
         if (!reserva) {
-            return res.status(404).json({ status: 404, message: 'Reserva no encontrada' });
+            return res.status(404).json({ status: 404, message: "Reserva no encontrada" });
         }
 
         res.json({ status: 200, data: reserva });
     } catch (error) {
         res.status(500).json({
             status: 500,
-            message: 'Error al obtener la reserva',
-            error: error.message,
+            message: "Error al obtener la reserva",
+            error: error.message
         });
     }
 };
 
-// Crear una nueva reserva
+// Crear reserva
 const createReserva = async (req, res) => {
     const { clienteId, viajeContainerId, fechaReserva, reservaEstadoId } = req.body;
 
@@ -60,7 +81,7 @@ const createReserva = async (req, res) => {
         if (!clienteId || !viajeContainerId || !fechaReserva || !reservaEstadoId) {
             return res.status(400).json({
                 status: 400,
-                message: 'Faltan campos obligatorios (clienteId, viajeContainerId, fechaReserva, reservaEstadoId)',
+                message: "Faltan campos obligatorios (clienteId, viajeContainerId, fechaReserva, reservaEstadoId)"
             });
         }
 
@@ -68,33 +89,30 @@ const createReserva = async (req, res) => {
             clienteId,
             viajeContainerId,
             fechaReserva,
-            reservaEstadoId,
+            reservaEstadoId
         });
 
         res.status(201).json({
             status: 201,
             data: nuevaReserva,
-            message: 'Reserva creada exitosamente',
+            message: "Reserva creada exitosamente"
         });
     } catch (error) {
         res.status(500).json({
             status: 500,
-            message: 'Error al crear la reserva',
-            error: error.message,
+            message: "Error al crear la reserva",
+            error: error.message
         });
     }
 };
 
-// Editar una reserva
+// Editar
 const updateReserva = async (req, res) => {
     try {
         const reserva = await Reserva.findByPk(req.params.id);
 
         if (!reserva) {
-            return res.status(404).json({
-                status: 404,
-                message: 'Reserva no encontrada',
-            });
+            return res.status(404).json({ status: 404, message: "Reserva no encontrada" });
         }
 
         const { clienteId, viajeContainerId, fechaReserva, reservaEstadoId } = req.body;
@@ -108,19 +126,19 @@ const updateReserva = async (req, res) => {
 
         res.status(200).json({
             status: 200,
-            message: 'Reserva actualizada exitosamente',
-            data: reserva,
+            message: "Reserva actualizada exitosamente",
+            data: reserva
         });
     } catch (error) {
         res.status(500).json({
             status: 500,
-            message: 'Error al actualizar la reserva',
-            error: error.message,
+            message: "Error al actualizar la reserva",
+            error: error.message
         });
     }
 };
 
-// Eliminar una reserva
+// Eliminar
 const deleteReserva = async (req, res) => {
     try {
         const reserva = await Reserva.findByPk(req.params.id);
@@ -128,7 +146,7 @@ const deleteReserva = async (req, res) => {
         if (!reserva) {
             return res.status(404).json({
                 status: 404,
-                message: 'Reserva no encontrada',
+                message: "Reserva no encontrada"
             });
         }
 
@@ -136,31 +154,69 @@ const deleteReserva = async (req, res) => {
 
         res.status(200).json({
             status: 200,
-            message: 'Reserva eliminada exitosamente',
+            message: "Reserva eliminada exitosamente"
         });
     } catch (error) {
         res.status(500).json({
             status: 500,
-            message: 'Error al eliminar la reserva',
-            error: error.message,
+            message: "Error al eliminar la reserva",
+            error: error.message
         });
     }
 };
 
-// ReservaController
+// Factura por reserva
 const getFacturaByReserva = async (req, res) => {
-    const { Reserva, Factura } = require('../models');
-  
     const factura = await Factura.findOne({
-      where: { reservaId: req.params.id },
+        where: { reservaId: req.params.id }
     });
-  
+
     if (!factura)
-      return res.status(404).json({ message: 'No existe factura para la reserva' });
-  
+        return res.status(404).json({ message: "No existe factura para la reserva" });
+
     res.json({ data: factura });
-  };
-  
+};
+
+// Obtener reservas por cliente
+const getReservasByCliente = async (req, res) => {
+    try {
+        const { clienteId } = req.params;
+
+        const reservas = await Reserva.findAll({
+            where: { clienteId },
+            include: reservaInclude
+        });
+
+        res.status(200).json({
+            status: 200,
+            data: reservas
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 500,
+            message: "Error al obtener reservas del cliente",
+            error: error.message
+        });
+    }
+};
+
+
+// const getReservasByAdmin = async (req, res) => {
+//     try {
+//         const reservas = await Reserva.findAll({
+//             where: { clienteId: req.params.clienteId },
+//             include: reservaInclude
+//         });
+
+//         res.json({ status: 200, data: reservas });
+//     } catch (error) {
+//         res.status(500).json({
+//             status: 500,
+//             message: "Error al obtener las reservas",
+//             error: error.message
+//         });
+//     }
+// };
 
 module.exports = {
     getReservas,
@@ -168,5 +224,6 @@ module.exports = {
     createReserva,
     updateReserva,
     deleteReserva,
-    getFacturaByReserva
+    getFacturaByReserva,
+    getReservasByCliente
 };

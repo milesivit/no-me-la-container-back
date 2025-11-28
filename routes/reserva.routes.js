@@ -6,7 +6,8 @@ const {
     createReserva,
     updateReserva,
     deleteReserva,
-    getFacturaByReserva
+    getFacturaByReserva,
+    getReservasByCliente
 } = require('../controllers/reserva.controller');
 
 /**
@@ -314,5 +315,6 @@ router.put('/:id', updateReserva);
  */
 router.delete('/:id', deleteReserva);
 router.get('/:id/factura', getFacturaByReserva);
+router.get("/cliente/:clienteId", getReservasByCliente);
 
 module.exports = router;

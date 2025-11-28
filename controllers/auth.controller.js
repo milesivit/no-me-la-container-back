@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const { Usuario, Empleado } = require('../models');
+const { Usuario, Empleado, Cliente } = require('../models');
 const { sendEmail } = require('../utils/mailer');
 
 //mapa temporal para tokens de recuperación
@@ -66,12 +66,17 @@ const login = async (req, res) => {
             where: { usuarioId: userExist.id }
         });
 
+        const cliente = await Cliente.findOne({
+            where: { usuarioId: userExist.id }
+        });
+
         const user = {
             id: userExist.id,
             nombre: userExist.nombre,
             correo: userExist.correo,
             rol: userExist.rol,
-            empleadoId: empleado ? empleado.id : null  
+            empleadoId: empleado ? empleado.id : null,
+            clienteId: cliente ? cliente.id : null  
         };
 
         const token = jwt.sign(
