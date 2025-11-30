@@ -10,12 +10,20 @@ const {
     reserva_estado,
     Reserva_servicios,
     Reserva_viaje,
-    Factura
+    Usuario,
+    Factura,
+    Pago
 } = require("../models");
 
 // INCLUDE BASE
 const reservaInclude = [
-    { model: Cliente, as: "clientes" },
+    { 
+        model: Cliente, 
+        as: "clientes",
+        include: [
+            { model: Usuario, as: "usuarios" }
+        ]
+    },
     { 
         model: Viaje_container, 
         as: "viajesContainer",
@@ -35,7 +43,13 @@ const reservaInclude = [
     },
     { model: reserva_estado, as: "reservasEstado" },
     { model: Reserva_servicios, as: "ServiciosReserva" },
-    { model: Factura, as: "Facturas" }
+    { 
+        model: Factura, 
+        as: "Facturas",
+        include: [
+            { model: Pago, as: "Pagos" }
+        ]
+    }
 ];
 
 // Obtener todas las reservas
