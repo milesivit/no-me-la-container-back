@@ -12,7 +12,8 @@ const {
     Reserva_viaje,
     Usuario,
     Factura,
-    Pago
+    Pago,
+    Ciudad
 } = require("../models");
 
 // INCLUDE BASE
@@ -32,8 +33,20 @@ const reservaInclude = [
                 model: Viaje,
                 as: "viajes",
                 include: [
-                    { model: Puerto, as: "puertoOrigen" },
-                    { model: Puerto, as: "puertoDestino" },
+                    { 
+                        model: Puerto, 
+                        as: "puertoOrigen",
+                        include: [
+                            { model: Ciudad, as: "ciudades" }
+                        ]
+                    },
+                    { 
+                        model: Puerto, 
+                        as: "puertoDestino",
+                        include: [
+                            { model: Ciudad, as: "ciudades" }
+                        ]
+                    },
                     { model: Barco, as: "barcos" }
                 ]
             },
@@ -51,6 +64,7 @@ const reservaInclude = [
         ]
     }
 ];
+
 
 // Obtener todas las reservas
 const getReservas = async (req, res) => {
